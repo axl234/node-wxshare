@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><%= title %></title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'/>
+<meta name="description" content="<%= desc %>"/>
+<META HTTP-EQUIV="pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<META HTTP-EQUIV="expires" CONTENT="0">
+<script>
+  (function (doc, win) {
+  let docEl = doc.documentElement
+  let resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize'
+  let recalc = function () {
+    let clientWidth = docEl.clientWidth
+    if (!clientWidth) return
+    document.documentElement.style.fontSize = document.documentElement.clientWidth / 7.5 + 'px'
+  }
+  if (!doc.addEventListener) return
+  win.addEventListener(resizeEvt, recalc, false)
+  doc.addEventListener('DOMContentLoaded', recalc, false)
+})(document, window)
+
+</script>
+<link rel="stylesheet" href="/stylesheets/swiper.min.css">
+<link rel="stylesheet" href="/stylesheets/animate.min.css">
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/index.css">
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.3.3/video-js.css" rel="stylesheet"> -->
+</head>
+
+<body>
+  <div id="container">
+    <section class="loading">
+      <div class="bg">
+        <img src="/images/load-bg.jpg" alt="">
+      </div>
+      <div class="circle">
+        <div class="cir c0"></div>
+        <div class="cir c1">
+          <div class="cir-s"></div>
+        </div>
+        <!-- <div class="cir c2"></div> -->
+        <div class="cir c3">
+          <div class="cir-s"></div>
+        </div>
+        <div class="cir c4"></div>
+        <div class="p"><span id="loading">0</span>%</div>
+      </div>
+    </section>
+    <section class="main">
+      
+      <div class="swiper-container">
+          <div class="swiper-wrapper">
+            <!---------------slide2-------------->   
+            <section class="swiper-slide swiper-slide2">
+                <a href="javascript:;" id="admute" class="mute on"></a>
+              <img class="img1" id="img1" src="/images/1-1.png">
+              <img class="img2" id="img2" src="/images/1-2.png">
+              <!-- <p class="img2" id="img2">我们看完电影，记得的可能是一个画面，一段台词，一段表演，就把他们串起来，看到这些，你或许可以把你看这部电影的感情、经历找回来
+              </p> -->
+              <audio id="ad" src="/video/music.mp3" preload="auto" ></audio>
+            </section>
+            <!----------------slide3-------------->
+            <section class="swiper-slide swiper-slide3">
+              <a href="javascript:;" id="mute" class="mute on"></a>
+                <video
+                id="vd"
+                src="https://pan.baidu.com/bcccfc0c-d917-4d11-828c-c492825f6a24" 
+                preload="auto" 
+                webkit-playsinline="true"  
+                playsinline="true"  
+                x-webkit-airplay="allow" 
+                x5-video-player-type="h5"  
+                x5-video-player-fullscreen="true" 
+                x5-video-orientation="portraint" 
+                style="object-fit:fill"> 
+              </video>
+            </section>
+          </div>
+          <div class="arrow">
+              <img src="/images/arrow.png" alt="">
+            </div>
+          <div class="arrowUp">
+            <img src="/images/arrow.png" alt="">
+          </div>
+      </div>
+    </section>
+  </div>
+<script src="/javascripts/jquery.min.js"></script>
+<script src="/javascripts/swiper.min.js"></script>
+<script src="/javascripts/swiper.animate.min.js"></script>
+<!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>  -->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.3.3/video.js"></script> -->
+<script src="/javascripts/index.js"></script>
+<script>
+  (function(wx) {
+    // alert(location.href.split('#')[0])
+    wx.config({
+      debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      appId: '<%= appId %>', // 必填，公众号的唯一标识
+      timestamp: '<%= timestamp %>', // 必填，生成签名的时间戳
+      nonceStr: '<%= nonceStr %>', // 必填，生成签名的随机串
+      signature: '<%= signature %>',// 必填，签名
+      jsApiList: [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'onMenuShareQZone'
+      ] // 必填，需要使用的JS接口列表
+    });
+    wx.ready(function(){
+      var shareData = {
+        title: '<%= title %>',
+        imgUrl: '<%= imgUrl %>',
+        link: '',
+        desc: '<%= desc %>',
+        success: function(res) {
+          console.log('success');
+          console.log(res);
+        },
+        fail:function(err) {
+          console.log('err');
+          console.log(res);
+        }
+      }
+      wx.onMenuShareTimeline(shareData);
+      wx.onMenuShareAppMessage(shareData);
+      wx.onMenuShareQQ(shareData);
+      wx.onMenuShareWeibo(shareData);
+      wx.onMenuShareQZone(shareData);
+      // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+
+      wx.error(function(res){
+        console.log(res)
+        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+      });
+    });
+  })(wx)
+</script>
+</body>
+</html>
